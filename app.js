@@ -1,20 +1,20 @@
 let show_celcius = true;
 
-let temp_c;
-let temp_f;
-
-let show_temp;
-
 function change_temp() {
   const temp_btn = document.querySelector('#temp_switch');
+  const temp_c = document.querySelector('.temp_c');
+  const temp_f = document.querySelector('.temp_f');
   temp_btn.addEventListener('click', () => {
     if (show_celcius) {
-      temp_c = false;
-      temp_btn.innerHTML = 'F';
+      show_celcius = false;
+      temp_c.style.display = 'none';
+      temp_f.style.display = 'block';
     } else {
-      temp_c = true;
-      temp_btn.innerHTML = '°C';
+      show_celcius = true;
+      temp_c.style.display = 'block';
+      temp_f.style.display = 'none';
     }
+    console.log(show_celcius);
   });
 }
 
@@ -35,20 +35,14 @@ async function get_weather(value) {
   const weather_data = await response.json();
   console.log(weather_data);
 
-  temp_c = weather_data.current.temp_c;
-  temp_f = weather_data.current.temp_f;
-
-  if (show_celcius) {
-    show_temp = temp_c + '°C';
-  } else {
-    show_temp = temp_f + '°F';
-  }
-
   const city = document.querySelector('.city');
   city.innerHTML = value;
 
-  const temp = document.querySelector('.temp');
-  temp.innerHTML = show_temp;
+  const temp_c = document.querySelector('.temp_c');
+  temp_c.innerHTML = weather_data.current.temp_c + '°C';
+
+  const temp_f = document.querySelector('.temp_f');
+  temp_f.innerHTML = weather_data.current.temp_f + '°F';
 
   const weather = document.querySelector('.weather');
   weather.innerHTML = weather_data.current.condition.text;
