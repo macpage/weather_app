@@ -1,5 +1,15 @@
 let show_celcius = true;
 
+const days = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
 // Click temp button to swich all the temps to celcius or fahrenheit
 // Hide and show the classes
 function change_temp() {
@@ -38,11 +48,21 @@ function search() {
 async function get_weather(value) {
   const response = await fetch(
     'http://api.weatherapi.com/v1/forecast.json?key=d2af2ae176774e7b919182628232805&q=' +
-      value,
+      value +
+      '&days=7',
     { mode: 'cors' }
   );
   const weather_data = await response.json();
   console.log(weather_data);
+
+  const day = document.querySelectorAll('#day_name');
+
+  const d = new Date(weather_data.forecast.forecastday[0].date);
+
+  day.forEach((e) => {
+    e.innerHTML = days[d.getDay()];
+  });
+  console.log('day ' + days[d.getDay()]);
 
   const city = document.querySelector('.city');
   city.innerHTML = value;
@@ -56,14 +76,19 @@ async function get_weather(value) {
   const weather = document.querySelector('.weather');
   weather.innerHTML = weather_data.current.condition.text;
 
-  get_day(weather_data.forecast.forecastday[0].hour);
+  get_day(weather_data.forecast.forecastday[0].hour, days[d.getDay()]);
+  get_week(weather_data);
 }
 
 // Show data of the whole day
-function get_day(data) {
-  console.log(data);
+function get_day(data, day) {
+  document.querySelector('#weather_fullday').innerHTML = '';
+  const day_name = document.createElement('p');
+  day_name.setAttribute('id', 'day_name');
+  document.querySelector('#weather_fullday').append(day_name);
+  day_name.innerHTML = day;
 
-  console.log(data[0]);
+  // Set temps and weather condition
   data.forEach((e, index) => {
     const c = document.createElement('p');
     c.setAttribute('class', 'temp_c');
@@ -74,8 +99,36 @@ function get_day(data) {
     c.innerHTML = index + ' ' + e.temp_c + '°C';
     f.innerHTML = index + ' ' + e.temp_f + '°F';
     condition.innerHTML = e.condition.text;
-    console.log(index);
+
     document.querySelector('#weather_fullday').append(c, f, condition);
+  });
+}
+
+// show weather for whole week
+// Click day to show more data
+function get_week(data) {
+  const week_days = document
+    .querySelector('#weather_fullweek')
+    .querySelectorAll('div');
+
+  console.log(week_days[0]);
+
+  week_days.forEach((e, index) => {
+    // Set weather week day to current weak days starting from todays date
+    const d = new Date(data.forecast.forecastday[index].date);
+    e.querySelector('p').innerHTML = days[d.getDay()];
+
+    e.querySelector('.temp_c').innerHTML =
+      data.forecast.forecastday[index].day.avgtemp_c;
+
+    // Click day to show the current day data in the full day section
+    e.addEventListener('click', () => {
+      const day = document.querySelectorAll('#day_name');
+      day.forEach((d) => {
+        d.innerHTML = e.querySelector('p').innerHTML;
+      });
+      get_day(data.forecast.forecastday[index].hour, days[d.getDay()]);
+    });
   });
 }
 
