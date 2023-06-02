@@ -1,23 +1,31 @@
 let show_celcius = true;
 
+// Click temp button to swich all the temps to celcius or fahrenheit
+// Hide and show the classes
 function change_temp() {
   const temp_btn = document.querySelector('#temp_switch');
-  const temp_c = document.querySelector('.temp_c');
-  const temp_f = document.querySelector('.temp_f');
   temp_btn.addEventListener('click', () => {
+    const temp_c = document.querySelectorAll('.temp_c');
+    const temp_f = document.querySelectorAll('.temp_f');
     if (show_celcius) {
       show_celcius = false;
-      temp_c.style.display = 'none';
-      temp_f.style.display = 'block';
+      for (let i = 0; i < temp_c.length; i++) {
+        temp_c[i].style.display = 'none';
+        temp_f[i].style.display = 'block';
+      }
     } else {
       show_celcius = true;
-      temp_c.style.display = 'block';
-      temp_f.style.display = 'none';
+      for (let i = 0; i < temp_c.length; i++) {
+        temp_c[i].style.display = 'block';
+        temp_f[i].style.display = 'none';
+      }
     }
     console.log(show_celcius);
+    console.log(temp_c.length);
   });
 }
 
+// Enter a city name and click the button to seach todays weather data
 function search() {
   const searchbar = document.querySelector('#searchbar');
   const search_btn = document.querySelector('#search_btn');
@@ -26,6 +34,7 @@ function search() {
   });
 }
 
+// Fetch weather data from api and show them
 async function get_weather(value) {
   const response = await fetch(
     'http://api.weatherapi.com/v1/forecast.json?key=d2af2ae176774e7b919182628232805&q=' +
@@ -50,10 +59,24 @@ async function get_weather(value) {
   get_day(weather_data.forecast.forecastday[0].hour);
 }
 
+// Show data of the whole day
 function get_day(data) {
   console.log(data);
 
   console.log(data[0]);
+  data.forEach((e, index) => {
+    const c = document.createElement('p');
+    c.setAttribute('class', 'temp_c');
+    const f = document.createElement('p');
+    f.setAttribute('class', 'temp_f');
+    const condition = document.createElement('p');
+
+    c.innerHTML = index + ' ' + e.temp_c + '°C';
+    f.innerHTML = index + ' ' + e.temp_f + '°F';
+    condition.innerHTML = e.condition.text;
+    console.log(index);
+    document.querySelector('#weather_fullday').append(c, f, condition);
+  });
 }
 
 search();
