@@ -79,6 +79,7 @@ async function get_weather(value) {
   get_day(weather_data.forecast.forecastday[0].hour, days[d.getDay()]);
   get_week(weather_data);
   set_background(weather_data);
+  set_icon(weather_data);
 }
 
 // Show data of the whole day
@@ -163,6 +164,17 @@ function set_background(data) {
     console.log('night');
     background.style.backgroundColor = '#1a264f';
   }
+}
+
+// Set icon
+function set_icon(data) {
+  const icon = document.querySelector('.icon');
+
+  console.log(data.current.condition.icon);
+  data.current.condition.icon.split('weather');
+  console.log(data.current.condition.icon.split('64x64'));
+  const splitted = data.current.condition.icon.split('64x64')[1];
+  icon.src = 'pics/weather' + splitted;
 }
 
 search();
