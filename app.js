@@ -22,12 +22,14 @@ function change_temp() {
       for (let i = 0; i < temp_c.length; i++) {
         temp_c[i].style.display = 'none';
         temp_f[i].style.display = 'block';
+        temp_btn.innerHTML = '°F';
       }
     } else {
       show_celcius = true;
       for (let i = 0; i < temp_c.length; i++) {
         temp_c[i].style.display = 'block';
         temp_f[i].style.display = 'none';
+        temp_btn.innerHTML = '°C';
       }
     }
     console.log(show_celcius);
@@ -118,8 +120,11 @@ function get_week(data) {
     const d = new Date(data.forecast.forecastday[index].date);
     e.querySelector('p').innerHTML = days[d.getDay()];
 
+    // Set temps
     e.querySelector('.temp_c').innerHTML =
-      data.forecast.forecastday[index].day.avgtemp_c;
+      data.forecast.forecastday[index].day.avgtemp_c + '°C';
+    e.querySelector('.temp_f').innerHTML =
+      data.forecast.forecastday[index].day.avgtemp_f + '°F';
 
     // Click day to show the current day data in the full day section
     e.addEventListener('click', () => {
