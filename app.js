@@ -79,7 +79,10 @@ async function get_weather(value) {
   get_day(weather_data.forecast.forecastday[0].hour, days[d.getDay()]);
   get_week(weather_data);
   set_background(weather_data);
-  set_icon(weather_data);
+  set_icon(
+    weather_data.current.condition.icon,
+    document.querySelector('.icon')
+  );
 }
 
 // Show data of the whole day
@@ -135,12 +138,20 @@ function get_week(data) {
     const d = new Date(data.forecast.forecastday[index].date);
     e.querySelector('p').innerHTML = days[d.getDay()];
 
+    // Set weather icon
+    set_icon(
+      data.forecast.forecastday[index].day.condition.icon,
+      e.querySelector('img')
+    );
     // Set temps
     e.querySelector('.temp_c').innerHTML =
       data.forecast.forecastday[index].day.avgtemp_c + '°C';
     e.querySelector('.temp_f').innerHTML =
       data.forecast.forecastday[index].day.avgtemp_f + '°F';
 
+    // Weather information
+    e.querySelector('.weather').innerHTML =
+      data.forecast.forecastday[index].day.condition.text;
     // Click day to show the current day data in the full day section
     e.addEventListener('click', () => {
       const day = document.querySelectorAll('#day_name');
@@ -167,14 +178,12 @@ function set_background(data) {
 }
 
 // Set icon
-function set_icon(data) {
-  const icon = document.querySelector('.icon');
+function set_icon(data, pic) {
+  let icon = pic;
 
-  console.log(data.current.condition.icon);
-  data.current.condition.icon.split('weather');
-  console.log(data.current.condition.icon.split('64x64'));
-  const splitted = data.current.condition.icon.split('64x64')[1];
+  const splitted = data.split('64x64')[1];
   icon.src = 'pics/weather' + splitted;
+  return 'pics/weather' + splitted;
 }
 
 search();
