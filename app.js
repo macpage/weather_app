@@ -78,6 +78,7 @@ async function get_weather(value) {
 
   get_day(weather_data.forecast.forecastday[0].hour, days[d.getDay()]);
   get_week(weather_data);
+  set_background(weather_data);
 }
 
 // Show data of the whole day
@@ -148,6 +149,20 @@ function get_week(data) {
       get_day(data.forecast.forecastday[index].hour, days[d.getDay()]);
     });
   });
+}
+
+// Set background color depending on time and weather condition
+function set_background(data) {
+  console.log(data.forecast.forecastday[0].astro);
+  const is_day = data.current.is_day;
+  const background = document.querySelector('body');
+  if (is_day == 1) {
+    console.log('day');
+    background.style.backgroundColor = '#00d9ff';
+  } else {
+    console.log('night');
+    background.style.backgroundColor = '#1a264f';
+  }
 }
 
 search();
