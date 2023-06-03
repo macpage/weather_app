@@ -32,8 +32,6 @@ function change_temp() {
         temp_btn.innerHTML = '°C';
       }
     }
-    console.log(show_celcius);
-    console.log(temp_c.length);
   });
 }
 
@@ -104,6 +102,21 @@ function get_day(data, day) {
 
     document.querySelector('#weather_fullday').append(c, f, condition);
   });
+
+  // Set the right temp if changing days
+  const temp_c = document.querySelectorAll('.temp_c');
+  const temp_f = document.querySelectorAll('.temp_f');
+  if (!show_celcius) {
+    for (let i = 0; i < temp_c.length; i++) {
+      temp_c[i].style.display = 'none';
+      temp_f[i].style.display = 'block';
+    }
+  } else {
+    for (let i = 0; i < temp_c.length; i++) {
+      temp_c[i].style.display = 'block';
+      temp_f[i].style.display = 'none';
+    }
+  }
 }
 
 // show weather for whole week
