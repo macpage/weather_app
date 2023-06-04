@@ -60,9 +60,14 @@ async function get_weather(value) {
   const d = new Date(weather_data.forecast.forecastday[0].date);
 
   day.forEach((e) => {
-    e.innerHTML = days[d.getDay()];
+    e.innerHTML = days[d.getDay()] + ' (Today)';
   });
   console.log('day ' + days[d.getDay()]);
+
+  const date = document
+    .querySelector('#current_weather')
+    .querySelector('.date');
+  date.innerHTML = weather_data.forecast.forecastday[0].date;
 
   const city = document.querySelector('.city');
   city.innerHTML = value;
@@ -94,18 +99,30 @@ function get_day(data, day) {
   day_name.innerHTML = day;
 
   // Set temps and weather condition
+  let clock = 0;
+  let time = 'AM';
   data.forEach((e, index) => {
+    const clock_time = document.createElement('p');
     const c = document.createElement('p');
     c.setAttribute('class', 'temp_c');
     const f = document.createElement('p');
     f.setAttribute('class', 'temp_f');
     const condition = document.createElement('p');
 
-    c.innerHTML = index + ' ' + e.temp_c + '°C';
-    f.innerHTML = index + ' ' + e.temp_f + '°F';
+    clock_time.innerHTML = ' [' + clock + ' ' + time + '] ';
+    c.innerHTML = e.temp_c + '°C';
+    f.innerHTML = e.temp_f + '°F';
     condition.innerHTML = e.condition.text;
-
-    document.querySelector('#weather_fullday').append(c, f, condition);
+    clock++;
+    if (clock == 12) {
+      time = 'PM';
+    }
+    if (clock == 13) {
+      clock = 1;
+    }
+    document
+      .querySelector('#weather_fullday')
+      .append(clock_time, c, f, condition);
   });
 
   // Set the right temp if changing days
@@ -137,6 +154,14 @@ function get_week(data) {
     // Set weather week day to current weak days starting from todays date
     const d = new Date(data.forecast.forecastday[index].date);
     e.querySelector('p').innerHTML = days[d.getDay()];
+
+    if (index == 0) {
+      e.querySelector('p').innerHTML = days[d.getDay()] + ' (Today)';
+    }
+
+    // Set date
+    const date = e.querySelector('.date');
+    date.innerHTML = data.forecast.forecastday[index].date;
 
     // Set weather icon
     set_icon(
