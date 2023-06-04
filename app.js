@@ -47,7 +47,7 @@ function search() {
 // Fetch weather data from api and show them
 async function get_weather(value) {
   const response = await fetch(
-    'http://api.weatherapi.com/v1/forecast.json?key=d2af2ae176774e7b919182628232805&q=' +
+    'https://api.weatherapi.com/v1/forecast.json?key=d2af2ae176774e7b919182628232805&q=' +
       value +
       '&days=7',
     { mode: 'cors' }
