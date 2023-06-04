@@ -179,10 +179,10 @@ function get_week(data) {
       data.forecast.forecastday[index].day.condition.text;
     // Click day to show the current day data in the full day section
     e.addEventListener('click', () => {
-      const day = document.querySelectorAll('#day_name');
-      day.forEach((d) => {
-        d.innerHTML = e.querySelector('p').innerHTML;
-      });
+      const day = document
+        .querySelector('#weather_fullday')
+        .querySelector('#day_name');
+      day.innerHTML = e.querySelector('p').innerHTML;
       get_day(data.forecast.forecastday[index].hour, days[d.getDay()]);
     });
   });

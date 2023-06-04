@@ -13,7 +13,7 @@ body{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1.5fr 1fr;
-    background-color: gray;
+    background-color: white;
     color: azure;
 }
 
@@ -67,6 +67,14 @@ justify-content: end;
 button{
     width: 7vw;
     height: 4vh;
+    background-color: grey;
+    color: white;
+    outline: none;
+    border: none;
+}
+
+button:hover{
+    cursor: pointer;
 }
 
 #weather_fullday{
